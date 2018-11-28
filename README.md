@@ -4,7 +4,7 @@ Online Study Group (OSG) educa62 merupakan sarana belajar online yang difasilita
 OSG batch kedua kali ini bertema tentang pemrograman Android Basic, dimana diperuntukkan untuk peserta yang ingin memulai membuat aplikasi Android mulai dari instalasi Android Studio hingga dapat membuat aplikasi sederhana.
 
 ## Sample Code Pertemuan 4
-Pertemuan 4 di OSG2 Android Basic membahas tentang Main Thread, Asynctask, Alarm Manager, Job Scheduler, Firebase Job Dispatcher dan Service. Sample code ini berisi:
+Pertemuan 4 di OSG2 Android Basic membahas tentang Main Thread, AsyncTask, Alarm Manager, Job Scheduler, Firebase Job Dispatcher dan Service. Sample code ini berisi:
 - Menjalankan Worker Thread
 - AsyncTask
 - Service dan IntentService

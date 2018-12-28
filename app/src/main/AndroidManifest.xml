@@ -32,6 +32,16 @@
             android:name=".MyJobService"
             android:label="Job service"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name=".MyAlarmManager"/>
+
+        <service
+            android:exported="false"
+            android:name=".MyJobFirebaseDispatcher">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

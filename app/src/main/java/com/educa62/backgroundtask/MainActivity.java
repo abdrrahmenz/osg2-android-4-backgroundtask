@@ -1,5 +1,7 @@
 package com.educa62.backgroundtask;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -18,6 +20,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String BROADCAST_ACTION = "BROADCAST_ACTION";
@@ -29,10 +35,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private BroadcastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
 
+    /**
+     * membuat alarm manager dan pendingIntent untuk diinisialisasi diOnCreate
+     */
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
+    /**
+     * membuat firebaseJobdispatcher untuk diinisialisasi diOnCreate
+     */
+    private FirebaseJobDispatcher dispatcher ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
+        pendingIntent = PendingIntent.getBroadcast(this, 0,
+                new Intent(this, MyAlarmManager.class), 0);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
@@ -42,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnScheduler).setOnClickListener(this);
         findViewById(R.id.btnIntentService).setOnClickListener(this);
         findViewById(R.id.btnService).setOnClickListener(this);
+        findViewById(R.id.btnFirebaseJobDispathcer).setOnClickListener(this);
+        findViewById(R.id.btnAlarm).setOnClickListener(this);
 
         registerMyReceiver();
     }
@@ -71,10 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnScheduler:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    runScheduler();
-                } else {
-                    // TODO
-                    // runJobDispatcher();
+                    runJobScheduler();
                 }
                 break;
             case R.id.btnIntentService:
@@ -83,6 +105,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnService:
                 runService();
                 break;
+            case R.id.btnFirebaseJobDispathcer:
+                runJobDispatcher();
+                break;
+            case R.id.btnAlarm:
+                runAlarm();
+                break;
+
             default:
 
         }
@@ -93,6 +122,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void runJobDispatcher() {
         // TODO panggil Firebase Job Dispatcher untuk menggantikan Job Scheduler
+        Job myJob = dispatcher.newJobBuilder()
+                .setService(MyJobFirebaseDispatcher.class) // the JobService that will be called
+                .setTag("my-unique-tag")        // uniquely identifies the job
+                .build();
+
+        dispatcher.mustSchedule(myJob);
+    }
+
+    /**
+     * Menjalankan Alarm Manager
+     */
+    private void runAlarm() {
+        // TODO panggil AlarmManager untuk memunculkan Toast dengan waktu tunggu 2 detik
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000,pendingIntent );
     }
 
     /**
@@ -135,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Menjalankan JobScheduler
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void runScheduler() {
+    private void runJobScheduler() {
         ComponentName serviceComponent = new ComponentName(this, MyJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
         builder.setMinimumLatency(1000); // wait at least

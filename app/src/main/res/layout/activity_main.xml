@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Scheduler"
+        android:text="JobScheduler"
         app:layout_constraintStart_toStartOf="@+id/btnIntentService"
         app:layout_constraintTop_toBottomOf="@+id/btnIntentService" />
 
@@ -53,4 +53,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnFirebaseJobDispathcer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Job Firebase Dispathcer"
+        app:layout_constraintEnd_toEndOf="@+id/btnScheduler"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnScheduler"
+        app:layout_constraintTop_toBottomOf="@+id/btnScheduler" />
+
+    <Button
+        android:id="@+id/btnAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Alarm Manager"
+        app:layout_constraintEnd_toEndOf="@+id/btnFirebaseJobDispathcer"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnFirebaseJobDispathcer"
+        app:layout_constraintTop_toBottomOf="@+id/btnFirebaseJobDispathcer" />
 </android.support.constraint.ConstraintLayout>
